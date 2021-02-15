@@ -10,7 +10,7 @@ public class Employees {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employees2_generator")
     @SequenceGenerator(name = "employees2_generator", sequenceName = "EMPLOYEES2_SEQ", allocationSize = 1)
     @Column(name = "ID", updatable = false, nullable = false)
-    private int id;
+    private long id;
 
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
@@ -35,6 +35,13 @@ public class Employees {
         this.currentOn = currentOn;
     }
 
+    public Employees(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+
+
     @Override
     public String toString() {
         return "Employees{" +
@@ -46,7 +53,7 @@ public class Employees {
                 '}';
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
