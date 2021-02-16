@@ -12,7 +12,6 @@ import java.util.Optional;
 public class EmployeeApplication {
 
     private static EmployeeDao employeeDao;
-    private static String unitName = "BASE_1";
 
 
     public static void main(String[] args) {
@@ -23,19 +22,22 @@ public class EmployeeApplication {
 
         for (String unitName : unitList) {
 
-            Employee employee1 = new Employee();
+            EmployeeDao employeeDao
+                    = new EmployeeDao(new JpaEntityManagerFactory().getEntityManager(unitName));
+
+            Employee employee1;
 
             if (unitName.equals("BASE_1")) {
-                employee1 = getEmployee(30);
+                employee1 = getEmployee(employeeDao, 30);
             } else {
-                employee1 = getEmployee(32);
+                employee1 = getEmployee(employeeDao, 32);
             }
 
             System.out.println(employee1);
-            updateEmployee(employee1, new String[]{"John", "Rambo"});
-            saveEmployee(new Employee("Monica", "Decoco", "decmon"));
-            deleteEmployee(getEmployee(31));
-            getAllEmployees().forEach(employee ->
+            updateEmployee(employeeDao, employee1, new String[]{"John", "Rambo"});
+            saveEmployee(employeeDao, new Employee("Monica", "Decoco", "decmon"));
+            deleteEmployee(employeeDao, getEmployee(employeeDao, 31));
+            getAllEmployees(employeeDao).forEach(employee ->
                     System.out.printf("%4d %15s %15s %6s %10s%n"
                             , employee.getId()
                             , employee.getFirstName()
@@ -47,37 +49,29 @@ public class EmployeeApplication {
         }
     }
 
-    private static class JpaEmployeeDataHolder {
-        private static final EmployeeDao employeeDao
-                = new EmployeeDao(new JpaEntityManagerFactory().getEntityManager(unitName));
-    }
 
-    public static Dao getJpaEmployeeDao() {
-        return JpaEmployeeDataHolder.employeeDao;
-    }
-
-    public static Employee getEmployee(long id) {
-        Optional<Employee> employee = getJpaEmployeeDao().get(id);
+    public static Employee getEmployee(EmployeeDao employeeDao, long id) {
+        Optional<Employee> employee = employeeDao.get(id);
         return employee.orElseGet(()-> {return new Employee("non-existing firstName"
                 , "non-existing lastName"
                 ,"non-existing login");
         });
     }
 
-    public static List<Employee> getAllEmployees() {
-        return getJpaEmployeeDao().getAll();
+    public static List<Employee> getAllEmployees(EmployeeDao employeeDao) {
+        return employeeDao.getAll();
     }
 
-    public static void updateEmployee(Employee employee, String[] params){
-        getJpaEmployeeDao().update(employee, params);
+    public static void updateEmployee(EmployeeDao employeeDao, Employee employee, String[] params){
+        employeeDao.update(employee, params);
     }
 
-    public static void saveEmployee(Employee employee) {
-        getJpaEmployeeDao().save(employee);
+    public static void saveEmployee(EmployeeDao employeeDao, Employee employee) {
+        employeeDao.save(employee);
     }
 
-    public static void deleteEmployee(Employee employee) {
-        getJpaEmployeeDao().delete(employee);
+    public static void deleteEmployee(EmployeeDao employeeDao, Employee employee) {
+        employeeDao.delete(employee);
     }
 
 }
