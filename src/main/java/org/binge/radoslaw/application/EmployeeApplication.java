@@ -1,7 +1,6 @@
 package org.binge.radoslaw.application;
 
 import org.binge.radoslaw.config.JpaEntityManagerFactory;
-import org.binge.radoslaw.dao.Dao;
 import org.binge.radoslaw.dao.EmployeeDao;
 import org.binge.radoslaw.model.Employee;
 
@@ -13,39 +12,19 @@ public class EmployeeApplication {
 
     private static EmployeeDao employeeDao;
 
-
     public static void main(String[] args) {
 
         List<String> unitList = new ArrayList<String>();
         unitList.add("BASE_1");
         unitList.add("BASE_2");
 
+
         for (String unitName : unitList) {
-
-            EmployeeDao employeeDao
-                    = new EmployeeDao(new JpaEntityManagerFactory().getEntityManager(unitName));
-
-            Employee employee1;
-
-            if (unitName.equals("BASE_1")) {
-                employee1 = getEmployee(employeeDao, 30);
-            } else {
-                employee1 = getEmployee(employeeDao, 32);
-            }
-
-            System.out.println(employee1);
-            updateEmployee(employeeDao, employee1, new String[]{"John", "Rambo"});
-            saveEmployee(employeeDao, new Employee("Monica", "Decoco", "decmon"));
-            deleteEmployee(employeeDao, getEmployee(employeeDao, 31));
-            getAllEmployees(employeeDao).forEach(employee ->
-                    System.out.printf("%4d %15s %15s %6s %10s%n"
-                            , employee.getId()
-                            , employee.getFirstName()
-                            , employee.getLastName()
-                            , employee.getLogin()
-                            , employee.getCurrentOn()
-                    )
-            );
+            Thread newThread = new Thread(() -> {
+                System.out.printf("Running thread for %s.%n", unitName);
+                runThread(unitName);
+            });
+            newThread.start();
         }
     }
 
@@ -72,6 +51,33 @@ public class EmployeeApplication {
 
     public static void deleteEmployee(EmployeeDao employeeDao, Employee employee) {
         employeeDao.delete(employee);
+    }
+
+    public static void runThread(String unitName) {
+        EmployeeDao employeeDao
+                = new EmployeeDao(new JpaEntityManagerFactory().getEntityManager(unitName));
+
+        Employee employee1;
+
+        if (unitName.equals("BASE_1")) {
+            employee1 = getEmployee(employeeDao, 30);
+        } else {
+            employee1 = getEmployee(employeeDao, 32);
+        }
+
+        System.out.println(employee1);
+        updateEmployee(employeeDao, employee1, new String[]{"John", "Rambo"});
+        saveEmployee(employeeDao, new Employee("Charles", "Boyle", "decmon"));
+        deleteEmployee(employeeDao, getEmployee(employeeDao, 31));
+        getAllEmployees(employeeDao).forEach(employee ->
+                System.out.printf("%4d %15s %15s %6s %10s%n"
+                        , employee.getId()
+                        , employee.getFirstName()
+                        , employee.getLastName()
+                        , employee.getLogin()
+                        , employee.getCurrentOn()
+                )
+            );
     }
 
 }
