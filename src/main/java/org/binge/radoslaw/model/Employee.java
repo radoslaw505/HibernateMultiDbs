@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Employees2", schema = "TEST")
-public class Employees {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employees2_generator")
@@ -24,10 +24,10 @@ public class Employees {
     @Column(name = "CURRENT_ON")
     private String currentOn;
 
-    public Employees() {
+    public Employee() {
     }
 
-    public Employees(int id, String firstName, String lastName, String login, String currentOn) {
+    public Employee(int id, String firstName, String lastName, String login, String currentOn) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,12 +35,11 @@ public class Employees {
         this.currentOn = currentOn;
     }
 
-    public Employees(String firstName, String lastName) {
+    public Employee(String firstName, String lastName, String login) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.login = login;
     }
-
-
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package org.binge.radoslaw.DAO;
+package org.binge.radoslaw.dao;
 
 import java.util.List;
 import java.util.Optional;

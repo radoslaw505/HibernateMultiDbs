@@ -1,51 +1,51 @@
-package org.binge.radoslaw.DAO;
+package org.binge.radoslaw.dao;
 
-import org.binge.radoslaw.model.Employees;
+import org.binge.radoslaw.model.Employee;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class EmployeesDao implements Dao<Employees> {
+public class EmployeeDao implements Dao<Employee> {
+
 
     private final EntityManager entityManager;
 
-    public EmployeesDao(EntityManager entityManager) {
+    public EmployeeDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     // standard constructors
 
     @Override
-    public Optional<Employees> get(long id) {
-        return Optional.ofNullable(entityManager.find(Employees.class, id));
+    public Optional<Employee> get(long id) {
+        return Optional.ofNullable(entityManager.find(Employee.class, id));
     }
 
     @Override
-    public List<Employees> getAll() {
-        Query query = entityManager.createQuery("SELECT e FROM Employees2 e");
+    public List<Employee> getAll() {
+        Query query = entityManager.createQuery("SELECT e FROM Employee e");
         return query.getResultList();
     }
 
     @Override
-    public void save(Employees employee) {
+    public void save(Employee employee) {
         executeInsideTransaction(entityManager -> entityManager.persist(employee));
     }
 
     @Override
-    public void update(Employees employee, String[] params) {
+    public void update(Employee employee, String[] params) {
         employee.setFirstName(Objects.requireNonNull(params[0], "Name cannot be null"));
         employee.setLastName(Objects.requireNonNull(params[1], "Email cannot be null"));
         executeInsideTransaction(entityManager -> entityManager.merge(employee));
     }
 
     @Override
-    public void delete(Employees employee) {
+    public void delete(Employee employee) {
         executeInsideTransaction(entityManager -> entityManager.remove(employee));
     }
 

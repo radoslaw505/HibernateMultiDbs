@@ -6,7 +6,7 @@
         version="2.1">
     <persistence-unit name="BASE_1">
         <description>Hibernate EntityManager Demo</description>
-        <class>org.binge.radoslaw.model.Employees</class>
+        <class>org.binge.radoslaw.model.Employee</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
@@ -19,7 +19,7 @@
     </persistence-unit>
     <persistence-unit name="BASE_2">
         <description>Hibernate EntityManager Demo</description>
-        <class>org.binge.radoslaw.model.Employees</class>
+        <class>org.binge.radoslaw.model.Employee</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
